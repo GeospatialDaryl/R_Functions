@@ -33,7 +33,7 @@ willow.examples <- function(inputDF, testP = "b14"){
         qqnorm(inputDF$Z)
 }
 
-willow.logistic.regression <- function( inputDF, trainingProportion = 0.75 ){
+willow.testTrain <- function( inputDF, trainingProportion = 0.75 ){
         ## 75% of the sample size
         smp_size <- floor(trainingProportion * nrow(inputDF))
         
@@ -44,4 +44,31 @@ willow.logistic.regression <- function( inputDF, trainingProportion = 0.75 ){
         train <- inputDF[train_ind, ]
         test <- inputDF[-train_ind, ]
         return( list(train, test ) )
+}
+
+willow.logistic.regression1 <- function(inputDF){
+        m1 <- glm(inputDF$status14 ~ inputDF$Z + inputDF$Ranch, 
+                  family = binomial(link = "logit"),
+                  data = inputDF)
+        print(summary(m1))
+        print(anova(m1, test = "Chisq"))
+        return(m1)       
+}
+
+willow.logistic.regressionNS <- function(inputDF){
+        m1 <- glm(inputDF$status14 ~ inputDF$Z + inputDF$NUTM, 
+                  family = binomial(link = "logit"),
+                  data = inputDF)
+        print(summary(m1))
+        print(anova(m1, test = "Chisq"))
+        return(m1)       
+}
+
+willow.logistic.regression <- function(inputDF){
+        m1 <- glm(inputDF$status14 ~ inputDF$Z, 
+                  family = binomial(link = "logit"),
+                  data = inputDF)
+        print(summary(m1))
+        print(anova(m1, test = "Chisq"))
+        return(m1)       
 }
